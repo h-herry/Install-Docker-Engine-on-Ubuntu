@@ -1,45 +1,44 @@
-# Install-Docker-Engine-on-Ubuntu
+以下是在 Ubuntu 22.04 上安装 Docker 的步骤：
 
-# 安装前的准备先更新
+准备工作：
+卸载操作系统默认安装的 Docker（如果有的话）：
+sudo apt-get remove docker docker-engine docker.io containerd runc
 
-  sudo apt-get update
-  sudo apt-get upgrade
-  
-  //出现该选项Y就行，没有则跳过
-  
-# 解决冲突
-  //运行以下命令以卸载所有冲突的软件包
-  
-  for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
-  
-  //更新软件包索引并安装软件包以允许使用 基于 HTTPS 的存储库
-  
-  sudo apt-get update
-  sudo apt-get install ca-certificates curl gnupg
-  
-  //添加 Docker 的官方 GPG 密钥：
-  
-  sudo install -m 0755 -d /etc/apt/keyrings
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-  
-  sudo chmod a+r /etc/apt/keyrings/docker.gpg
-  
-  //使用以下命令设置存储库：
-  
-  $echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-  //更新包索引
-  
-  sudo apt-get update
+安装必要的支持：
+sudo apt install apt-transport-https ca-certificates curl software-properties-common gnupg lsb-release
 
+添加 Docker 官方 GPG key：
+使用以下命令添加 Docker 官方 GPG key（也可以使用阿里源的 GPG KEY）：
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-# 安装docker命令
+添加 Docker APT 源：
+Docker 官方源：
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-  
-  验证：通过运行映像验证 Docker 引擎安装是否成功。hello-world
-  
-  sudo docker run hello-world
+阿里源（推荐使用阿里的 GPG KEY）：
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
+更新源并安装 Docker：
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io
+
+启动 Docker：
+sudo systemctl enable docker
+
+允许非 Root 用户执行 Docker 命令：
+添加 docker 用户组：
+sudo groupadd docker
+
+将当前用户添加到 docker 用户组：
+sudo usermod -aG docker $USER
+
+使权限生效：
+newgrp docker
+
+更新 .bashrc 文件：
+编辑 ~/.bashrc 文件，在文件末尾增加以下一行（如果没有此行命令，每次打开新终端都需要执行 newgrp docker 命令）：
+groupadd -f docker
+
+现在，您已经成功安装了 Docker！您可以运行 docker run --rm hello-world 来测试 Docker 是否安装正确。123
+
+如果您在使用过程中发现拉取 Docker 镜像速度较慢，可以配置 Docker 国内镜像加速。祝您使用愉快！🐳
