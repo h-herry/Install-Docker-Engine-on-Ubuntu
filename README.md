@@ -39,6 +39,7 @@ newgrp docker
 编辑 ~/.bashrc 文件，在文件末尾增加以下一行（如果没有此行命令，每次打开新终端都需要执行 newgrp docker 命令）：
 groupadd -f docker
 
-现在，您已经成功安装了 Docker！您可以运行 docker run --rm hello-world 来测试 Docker 是否安装正确。123
+现在已经成功安装了 Docker！
+可以运行 docker run --rm hello-world 来测试 Docker 是否安装正确。
 
 如果您在使用过程中发现拉取 Docker 镜像速度较慢，可以配置 Docker 国内镜像加速。祝您使用愉快！🐳
