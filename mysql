@@ -1,0 +1,26 @@
+# docker_mysql
+# 在 Ubuntu 上使用 Docker 安装 MySQL 的详细步骤：
+
+# 查看可用的 MySQL 版本： 首先可以访问 MySQL 镜像库地址：MySQL Docker Hub。在这里，您可以查看不同版本的 MySQL 镜像，包括最新版本 mysql:latest 以及其他特定版本。
+# 拉取 MySQL 镜像： 使用以下命令拉取官方的最新版本 MySQL 镜像：
+docker pull mysql:latest
+
+# 运行容器： 现在，您可以运行 MySQL 容器。以下是一个示例命令，您可以根据需要进行调整：
+
+docker run -itd --name mysql-container -p 3306:3306 -e MYSQL_ROOT_PASSWORD=your_password mysql:latest
+
+
+-p 3306:3306：将容器的 3306 端口映射到宿主机的 3306 端口，以便外部主机可以通过宿主机 IP 地址访问 MySQL 服务。
+
+-e MYSQL_ROOT_PASSWORD=your_password：设置 MySQL 服务的 root 用户密码。
+
+# 验证安装： 使用以下命令查看容器是否成功运行：
+
+docker ps
+
+# 连接到 MySQL 服务： 您可以使用 MySQL 客户端工具连接到 MySQL 服务，例如：
+
+mysql -h localhost -P 3306 -u root -p
+
+# 输入之前设置的密码即可登录。
+# 现在已经成功在 Docker 中安装了 MySQL
