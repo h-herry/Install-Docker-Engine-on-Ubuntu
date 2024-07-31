@@ -1,0 +1,19 @@
+# Portainer-_ubuntu
+在 Ubuntu 上安装 Portainer 的详细步骤：
+
+拉取 Portainer 镜像： 使用以下命令拉取 Portainer 镜像：
+docker pull portainer/portainer
+
+创建 Portainer 数据卷： 创建一个数据卷，用于保存 Portainer 的配置信息：
+docker volume create portainer_data
+
+启动 Portainer 容器： 使用以下命令启动 Portainer 容器：
+docker run -d -p 9000:9000 --name portainer --restart=always \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v portainer_data:/data portainer/portainer
+
+-p 9000:9000：将容器端口映射到宿主机的 9000 端口。
+--restart=always：在容器退出时总是重启容器。
+-v /var/run/docker.sock:/var/run/docker.sock：映射 Docker 的守护进程，用于控制 Docker。
+-v portainer_data:/data：保存 Portainer 的配置信息。
+访问 Portainer： 打开浏览器，访问 http://ip:9000（如果是云服务器，请确保防火墙或安全组允许从客户端 IP 地址访问宿主机的 9000 端口）。 首次登录时，您需要创建管理员账号和密码。
